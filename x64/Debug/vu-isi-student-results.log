@@ -1,0 +1,10 @@
+﻿  vu-isi-student-results.cpp
+C:\Users\vlada\Documents\Git\vu-isi-student-results\vu-isi-student-results.cpp(38,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\vlada\Documents\Git\vu-isi-student-results\vu-isi-student-results.cpp(90,17): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\vlada\Documents\Git\vu-isi-student-results\vu-isi-student-results.cpp(93,28): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\vlada\Documents\Git\vu-isi-student-results\vu-isi-student-results.cpp(159,26): warning C4101: 'e': unreferenced local variable
+C:\Users\vlada\Documents\Git\vu-isi-student-results\vu-isi-student-results.cpp(210,49): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\vlada\Documents\Git\vu-isi-student-results\vu-isi-student-results.cpp(211,52): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\vlada\Documents\Git\vu-isi-student-results\vu-isi-student-results.cpp(219,14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+C:\Users\vlada\Documents\Git\vu-isi-student-results\vu-isi-student-results.cpp(221,62): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  vu-isi-student-results.vcxproj -> C:\Users\vlada\Documents\Git\vu-isi-student-results\x64\Debug\vu-isi-student-results.exe
