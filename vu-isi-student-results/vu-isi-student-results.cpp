@@ -8,49 +8,50 @@
 
 using std::string; using std::vector;
 
+#define MAX_N 100
+#define MAX_G 100
+
 struct Student
 {
 	string name;
 	string surname;
-	vector<int> hwGrades;
+	int n_grades;
+	int hwGrades[MAX_G];
 	int examGrade;
 	float final;
 };
 
-void getInput(vector<Student>& students, bool& isMedian);
+void getInput(Student students[], int& n, bool& isMedian);
 void handleInput(string prompt_text, int& input, bool isGrade = false);
 
-void computeFinals(vector<Student>& students, bool isMedian);
-float getMedian(vector<int> v);
-float getAvg(vector<int> v);
+void computeFinals(Student students[], int n, bool isMedian);
+float getMedian(int arr[], int n);
+float getAvg(int arr[], int n);
 
-void printStudents(const vector<Student> students, bool isMedian);
+void printStudents(Student students[], int n, bool isMedian);
 
 int main()
 {
 	srand(time(0)); rand();
 	
-	vector<Student> students;
+	int n;
+	Student students[MAX_N];
 	bool isMedian;
 	
-	getInput(students, isMedian);
+	getInput(students, n, isMedian);
 
-	computeFinals(students, isMedian);
+	computeFinals(students, n, isMedian);
 
-	printStudents(students, isMedian);
+	printStudents(students, n, isMedian);
 	
 	return 0;
 }
 
-void getInput(vector<Student>& students, bool& isMedian)
+void getInput(Student students[], int& n, bool& isMedian)
 {
-	students.clear();
-	
-	int S = 0;
+	handleInput("Iveskite studentu skaiciu: ", n);
 
-	handleInput("Iveskite studentu skaiciu: ", S);
-
-	for (int i = 0; i < S; ++i)
+	for (int i = 0; i < n; ++i)
 	{
 		Student student;
 
@@ -75,19 +76,20 @@ void getInput(vector<Student>& students, bool& isMedian)
 
 		if (input == 't' || input == 'T')
 		{
-			int N;
-			handleInput("Iveskite pazymiu skaiciu: ", N);
+			handleInput("Iveskite pazymiu skaiciu: ", student.n_grades);
 
-			for (int j = 0; j < N; ++j)
+			for (int j = 0; j < student.n_grades; ++j)
 			{
 				int r_grade = ceil(1.0*rand() / RAND_MAX * 10);
-				student.hwGrades.push_back(r_grade);
+				student.hwGrades[j] = r_grade;
 			}
 			student.examGrade = ceil(1.0 * rand() / RAND_MAX * 10);
 		}
 		else
 		{
 			std::cout << "Iveskite studento pazymius (irasydami bet koki simboli be skaiciaus galite baigti rasyma)\n";
+
+			int j = 0;
 
 			do
 			{
@@ -96,16 +98,17 @@ void getInput(vector<Student>& students, bool& isMedian)
 				std::cin >> grade;
 				if (std::cin)
 				{
-					student.hwGrades.push_back(grade);
+					student.hwGrades[j] = grade;
+					j++;
 				}
-			} while (std::cin || student.hwGrades.size() == 0);
+			} while (std::cin || j == 0);
 			std::cin.clear(); std::cin.ignore();
 
 			handleInput("Iveskite egzamino rezultata: ", student.examGrade, true);
 			std::cout << std::endl;
 		}
 
-		students.push_back(student);
+		students[i] = student;
 	}
 
 	char input = ' ';
@@ -145,46 +148,46 @@ void handleInput(string prompt_text, int& input, bool isGrade)
 }
 
 
-void computeFinals(vector<Student>& students, bool isMedian)
+void computeFinals(Student students[], int n, bool isMedian)
 {
-	for (auto it_s = students.begin(); it_s != students.end(); ++it_s)
+	for (int i = 0; i < n; ++i)
 	{
 		if (isMedian)
-			it_s->final = 0.4 * getMedian(it_s->hwGrades) + 0.6 * it_s->examGrade;
+			students[i].final = 0.4 * getMedian(students[i].hwGrades, students[i].n_grades) + 0.6 * students[i].examGrade;
 		else
-			it_s->final = 0.4 * getAvg(it_s->hwGrades) + 0.6 * it_s->examGrade;
+			students[i].final = 0.4 * getAvg(students[i].hwGrades, students[i].n_grades) + 0.6 * students[i].examGrade;
 	}
 }
 
-float getMedian(vector<int> v)
+float getMedian(int arr[], int n)
 {
-	std::sort(v.begin(), v.end());
-	if (v.size() % 2 == 1)
-		return 1.0 * v.at(v.size() / 2);
+	std::sort(arr, arr + n - 1);
+	if (n % 2 == 1)
+		return 1.0 * arr[n / 2];
 	else
-		return 1.0 * (v.at(v.size() / 2 - 1) + v.at(v.size() / 2)) / 2;
+		return 1.0 * (arr[((int)(n / 2) - 1)] + arr[(int)(n / 2)]) / 2;
 }
 
-float getAvg(vector<int> v)
+float getAvg(int arr[], int n)
 {
 	float avg = 0;
 
-	for (auto it = v.begin(); it != v.end(); ++it)
-		avg += *it;
+	for (int i = 0; i < n; ++i)
+		avg += arr[i];
 
-	avg /= v.size();
+	avg /= n;
 
 	return avg;
 }
 
 
-void printStudents(const vector<Student> students, bool isMedian)
+void printStudents(Student students[], int n, bool isMedian)
 {
 	size_t len_name = 0, len_surname = 0;
-	for (auto it_s = students.begin(); it_s != students.end(); ++it_s)
+	for (int i = 0; i < n; ++i)
 	{
-		len_name = std::max(len_name, it_s->name.length());
-		len_surname = std::max(len_surname, it_s->surname.length());
+		len_name = std::max(len_name, students[i].name.length());
+		len_surname = std::max(len_surname, students[i].surname.length());
 	}
 
 	std::cout
@@ -196,13 +199,13 @@ void printStudents(const vector<Student> students, bool isMedian)
 		std::cout << "-";
 	std::cout << std::endl;
 
-	for (auto it_s = students.begin(); it_s != students.end(); ++it_s)
+	for (int i = 0; i < n; ++i)
 	{
 		std::cout
-			<< std::setw(len_surname + 2) << std::left << it_s->surname
-			<< std::setw(len_name + 2) << std::left << it_s->name
-			<< std::fixed << std::setprecision(2) << it_s->final
-		<< std::endl;
+			<< std::setw(len_surname + 2) << std::left << students[i].surname
+			<< std::setw(len_name + 2) << std::left << students[i].name
+			<< std::fixed << std::setprecision(2) << students[i].final
+			<< std::endl;
 	}
 }
 
